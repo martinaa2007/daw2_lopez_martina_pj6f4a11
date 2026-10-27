@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sweet Bakes Orders - Description</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1>Description and documentation</h1>
+
+    <h2>About the application</h2>
+    <p>
+      Sweet Bakes Orders is an order management application for our sales team.
+      After logging in, salespeople can create new customer orders and look up
+      the orders that have already been saved.
+    </p>
+
+    <h2>Operations menu</h2>
+
+    <h2>Create a new order</h2>
+    <p>
+      Fill in the form with the order code, the customer's full name, address,
+      email and phone number. Then tick the checkbox next to each product the
+      customer wants and enter the quantity. When you send the form, the
+      application shows the price of the order including 21% VAT, and the order
+      is saved automatically.
+    </p>
+
+    <h2>View orders</h2>
+    <p>This option has two operations:</p>
+    <p>View all orders: shows all the saved orders in a table.</p>
+    <p>
+      View one order: enter the code of an order and the application shows all
+      its data in a table.
+    </p>
+    <p>
+      If the order code does not exist, or the orders file cannot be found, an
+      error message is shown.
+    </p>
+
+    <div>
+      <button onclick="goTo('index.html')">Back to home</button>
+    </div>
+    <div>
+      <button onclick="goTo('authentication.html')">Authentication</button>
+    </div>
+
+    <script>
+      function goTo(page) {
+        window.location = page;
+      }
+    </script>
+  </body>
+</html>
