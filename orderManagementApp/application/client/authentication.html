@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sweet Bakes Orders - Authentication</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1>Authentication</h1>
+
+    <form id="authForm">
+      <label>
+        Username:
+        <input type="text" id="user" name="user" />
+      </label>
+      <br />
+      <label>
+        Password:
+        <input type="password" id="password" name="password" />
+      </label>
+      <br />
+      <button type="button" onclick="login()">Access operations menu</button>
+      <p id="message"></p>
+    </form>
+
+    <div>
+      <button onclick="goTo('index.html')">Back to home</button>
+    </div>
+
+    <script>
+      function goTo(page) {
+        window.location = page;
+      }
+
+      function login() {
+        const values = new FormData(document.getElementById("authForm"));
+        const message = document.getElementById("message");
+
+        if (values.get("user") === "" || values.get("password") === "") {
+          message.textContent = "Please enter your username and your password.";
+          return;
+        }
+
+        fetch("../server/authentication.php", {
+          method: "POST",
+          body: values,
+        })
+          .then((response) => response.json())
+          .then((result) => {
+            if (result.authenticated) {
+              goTo("operations_menu.html");
+            } else {
+              alert("Authentication error: the user could not be validated.");
+              goTo("index.html");
+            }
+          })
+          .catch((errors) => {
+            message.textContent = "Error contacting the server.";
+          });
+      }
+    </script>
+  </body>
+</html>
