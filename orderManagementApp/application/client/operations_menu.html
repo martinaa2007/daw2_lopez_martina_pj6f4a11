@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sweet Bakes Orders - Operations menu</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1>Operations menu</h1>
+
+    <label>
+      Select an operation:
+      <br />
+      <select id="operation">
+        <option value="create_order.html">Create a new order</option>
+        <option value="view_orders_menu.html">View orders</option>
+      </select>
+    </label>
+    <br />
+    <button onclick="goToOperation()">Go to selected operation</button>
+
+    <div>
+      <button onclick="goTo('index.html')">Back to home</button>
+    </div>
+
+    <script>
+      function goTo(page) {
+        window.location = page;
+      }
+
+      function goToOperation() {
+        const selected = document.getElementById("operation").value;
+        goTo(selected);
+      }
+    </script>
+  </body>
+</html>
