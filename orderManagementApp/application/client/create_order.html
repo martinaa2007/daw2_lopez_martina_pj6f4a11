@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sweet Bakes Orders - Create order</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1>Create a new order</h1>
+
+    <form id="orderForm">
+      <label>
+        Order code:
+        <input type="text" id="orderCode" name="orderCode" />
+      </label>
+      <br />
+      <label>
+        Customer full name:
+        <input type="text" id="customerName" name="customerName" />
+      </label>
+      <br />
+      <label>
+        Customer address:
+        <input type="text" id="address" name="address" />
+      </label>
+      <br />
+      <label>
+        Customer email:
+        <input type="text" id="email" name="email" />
+      </label>
+      <br />
+      <label>
+        Customer phone:
+        <input type="text" id="phone" name="phone" />
+      </label>
+
+      <h2>Products</h2>
+
+      <input type="checkbox" id="check1" onclick="enableQuantity(1)" />
+      Chocolate napolitana - €1.80 Quantity:
+      <input type="number" id="quantity1" name="quantity1" disabled />
+      <br />
+      <input type="checkbox" id="check2" onclick="enableQuantity(2)" /> Custard
+      cream napolitana - €1.90 Quantity:
+      <input type="number" id="quantity2" name="quantity2" disabled />
+      <br />
+      <input type="checkbox" id="check3" onclick="enableQuantity(3)" /> Butter
+      croissant - €1.50 Quantity:
+      <input type="number" id="quantity3" name="quantity3" disabled />
+      <br />
+      <input type="checkbox" id="check4" onclick="enableQuantity(4)" />
+      Chocolate chip cookie - €1.20 Quantity:
+      <input type="number" id="quantity4" name="quantity4" disabled />
+      <br />
+
+      <button type="button" onclick="sendOrder()">Send order</button>
+      <p id="result"></p>
+    </form>
+
+    <div>
+      <button onclick="goTo('operations_menu.html')">
+        Back to operations menu
+      </button>
+    </div>
+    <div>
+      <button onclick="goTo('index.html')">Back to home</button>
+    </div>
+
+    <script>
+      function goTo(page) {
+        window.location = page;
+      }
+
+      function enableQuantity(number) {
+        const check = document.getElementById("check" + number);
+        const quantity = document.getElementById("quantity" + number);
+        quantity.disabled = !check.checked;
+        if (!check.checked) {
+          quantity.value = "";
+        }
+      }
+
+      function sendOrder() {
+        const values = new FormData(document.getElementById("orderForm"));
+        const result = document.getElementById("result");
+
+        if (
+          values.get("orderCode") === "" ||
+          values.get("customerName") === "" ||
+          values.get("address") === "" ||
+          values.get("email") === "" ||
+          values.get("phone") === ""
+        ) {
+          result.textContent = "Please fill in all the customer data.";
+          return;
+        }
+
+        let hasProduct = false;
+        for (let i = 1; i <= 4; i++) {
+          const quantity = values.get("quantity" + i);
+          if (quantity !== null && quantity !== "") {
+            hasProduct = true;
+          }
+        }
+        if (!hasProduct) {
+          result.textContent =
+            "Please select at least one product and enter its quantity.";
+          return;
+        }
+
+        fetch("../server/create_order.php", {
+          method: "POST",
+          body: values,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.saved) {
+              result.textContent =
+                "Order saved. Total price including 21% VAT: €" +
+                data.totalWithVat;
+            } else {
+              result.textContent = "Error: the order could not be saved.";
+            }
+            result.textContent = "Error sending the order.";
+          });
+      }
+    </script>
+  </body>
+</html>
