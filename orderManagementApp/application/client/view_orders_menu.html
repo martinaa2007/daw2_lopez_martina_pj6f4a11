@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sweet Bakes Orders - View orders</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1>View orders</h1>
+
+    <label>
+      Select an operation:
+      <br />
+      <select id="operation">
+        <option value="../server/view_all_orders.php">View all orders</option>
+        <option value="view_one_order.html">View one order</option>
+      </select>
+    </label>
+    <br />
+    <button onclick="goToOperation()">Go to selected operation</button>
+
+    <div>
+      <button onclick="goTo('operations_menu.html')">
+        Back to operations menu
+      </button>
+    </div>
+    <div>
+      <button onclick="goTo('index.html')">Back to home</button>
+    </div>
+
+    <script>
+      function goTo(page) {
+        window.location = page;
+      }
+
+      function goToOperation() {
+        const selected = document.getElementById("operation").value;
+        goTo(selected);
+      }
+    </script>
+  </body>
+</html>
