@@ -113,15 +113,19 @@
           method: "POST",
           body: values,
         })
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.saved) {
+          .then((response) => {
+            if (response.status === 404) {
+              return response.text().then((html) => {
+                document.documentElement.innerHTML = html;
+              });
+            }
+            return response.json().then((data) => {
               result.textContent =
                 "Order saved. Total price including 21% VAT: €" +
                 data.totalWithVat;
-            } else {
-              result.textContent = "Error: the order could not be saved.";
-            }
+            });
+          })
+          .catch((errors) => {
             result.textContent = "Error sending the order.";
           });
       }

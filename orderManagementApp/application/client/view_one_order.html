@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sweet Bakes Orders - View one order</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1>View one order</h1>
+
+    <form action="../server/view_orders.php" method="GET">
+      <label>
+        Order code:
+        <input type="text" name="orderCode" />
+      </label>
+      <br />
+      <input type="submit" value="Search order" />
+    </form>
+
+    <div>
+      <button onclick="goTo('view_orders_menu.html')">
+        Back to view orders menu
+      </button>
+    </div>
+    <div>
+      <button onclick="goTo('operations_menu.html')">
+        Back to operations menu
+      </button>
+    </div>
+    <div>
+      <button onclick="goTo('index.html')">Back to home</button>
+    </div>
+
+    <script>
+      function goTo(page) {
+        window.location = page;
+      }
+    </script>
+  </body>
+</html>
