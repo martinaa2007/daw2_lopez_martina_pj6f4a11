@@ -54,14 +54,18 @@
 		];
 	}
 
-	// Reads all the orders from the file (empty list if the file does not exist yet)
+	// Reads all the orders from the file.
+	// Returns an empty list if the file does not exist yet, or null if it cannot be read
 	function readOrders($filename) {
 		if (!file_exists($filename)) {
 			return [];
 		}
+		if (!is_readable($filename)) {
+			return null;
+		}
 		$orders = json_decode(file_get_contents($filename), true);
 		if (!is_array($orders)) {
-			return [];
+			return null;
 		}
 		return $orders;
 	}
@@ -72,26 +76,49 @@
 		return file_put_contents($filename, $json, LOCK_EX) !== false;
 	}
 
+	// Sends the 404 error page (HTML) with the message and the three buttons
+	function sendNotFound($message) {
+		header("HTTP/1.1 404 Not Found");
+		echo "<!DOCTYPE html>";
+		echo "<html lang=\"en\"><head><meta charset=\"UTF-8\"><title>Sweet Bakes Orders - Error</title>";
+		echo "<link rel=\"stylesheet\" href=\"styles.css\"></head><body>";
+		echo "<h1>Error</h1>";
+		echo "<p>" . htmlspecialchars($message) . "</p>";
+		echo "<div><button onclick=\"goTo('view_orders_menu.html')\">Back to view orders menu</button></div>";
+		echo "<div><button onclick=\"goTo('operations_menu.html')\">Back to operations menu</button></div>";
+		echo "<div><button onclick=\"goTo('index.html')\">Back to home</button></div>";
+		echo "</body></html>";
+	}
+
 	// Sends only the result to the client, in JSON format
-	function sendResult($totalWithVat, $saved) {
+	function sendResult($totalWithVat) {
 		header('Content-Type: application/json');
-		echo json_encode([
-			'totalWithVat' => number_format($totalWithVat, 2),
-			'saved' => $saved
-		]);
+		echo json_encode(['totalWithVat' => number_format($totalWithVat, 2)]);
 	}
 
 	// Main program
+	$ordersFolder = "../../orders";
 	$ordersFile = "../../orders/orders.json";
+	$errorMessage = "Error: the orders file could not be found or opened.";
 
 	$products = getProducts();
 	$total = calculateTotal($products, $_POST);
 	$totalWithVat = addVat($total);
 	$order = buildOrder($products, $_POST, $totalWithVat);
 
-	$orders = readOrders($ordersFile);
-	$orders[] = $order;
-	$saved = saveOrders($ordersFile, $orders);
+	$orders = null;
+	if (file_exists($ordersFolder)) {
+		$orders = readOrders($ordersFile);
+	}
 
-	sendResult($totalWithVat, $saved);
+	if ($orders === null) {
+		sendNotFound($errorMessage);
+	} else {
+		$orders[] = $order;
+		if (saveOrders($ordersFile, $orders)) {
+			sendResult($totalWithVat);
+		} else {
+			sendNotFound($errorMessage);
+		}
+	}
 ?>
