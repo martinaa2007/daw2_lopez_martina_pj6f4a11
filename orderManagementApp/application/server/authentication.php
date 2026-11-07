@@ -27,6 +27,6 @@
 	$user = isset($_POST['user']) ? $_POST['user'] : '';
 	$password = isset($_POST['password']) ? $_POST['password'] : '';
 
-	$users = readUsers("../../users/users_test.json"); // TEST: restore to users.json when finished
+		$users = readUsers("../../users/users.json"); // TEST: restore to users.json when finished
 	sendResult(checkCredentials($users, $user, $password));
 ?>
