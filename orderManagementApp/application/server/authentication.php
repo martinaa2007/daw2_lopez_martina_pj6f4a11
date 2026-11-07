@@ -24,7 +24,7 @@
 	}
 
 	// Main program
-		$users = readUsers("../../users/users.json");
+	$user = isset($_POST['user']) ? $_POST['user'] : '';
 	$password = isset($_POST['password']) ? $_POST['password'] : '';
 
 	$users = readUsers("../../users/users_test.json"); // TEST: restore to users.json when finished
